@@ -134,11 +134,14 @@ const AddEditPostDialog = ({
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Psot !</DialogTitle>
+        <DialogTitle>
+          {from === "edit" ? "Edit Psot !" : "Add New Post"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Edit Post Tilte and Body before Press Edit Post Button, You Can
-            Cancle this Action When Press (CANCEL) Button.
+            {from === "edit"
+              ? "Edit Post Tilte and Body before Press Edit Post Button, You Can Cancle this Action When Press (CANCEL) Button."
+              : "Add New Post with New Title and New Body befor Press ( Add Post ) Or Cancle adding Post by Press ( CANCLE )"}
           </DialogContentText>
 
           <TextField
