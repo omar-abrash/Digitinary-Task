@@ -7,6 +7,7 @@ const appContext = createContext({
   userIdHandler: () => {},
   newPosts: [],
   addNewPost: () => {},
+  editPost: () => {},
   deletePost: () => {},
 });
 
@@ -24,6 +25,22 @@ const AppContextProvider = (props) => {
   const addNewPost = (newPost) => {
     setNewPosts((prevState) => [newPost, ...prevState]);
   };
+  //
+  const editPost = (editPost) => {
+    setNewPosts((prevState) => {
+      const findPostIndex = prevState.findIndex(
+        (post) => post.id === editPost.id
+      );
+      //
+      if (findPostIndex < 0) {
+        return prevState;
+      }
+      const updatedPosts = [...prevState];
+      updatedPosts[findPostIndex] = editPost;
+      return updatedPosts;
+    });
+  };
+  //
   const deletePost = (postId) => {
     setNewPosts((prevState) => {
       return prevState.filter((post) => post.id !== postId);
@@ -37,6 +54,7 @@ const AppContextProvider = (props) => {
     userIdHandler: userIdHandler,
     newPosts: newPosts,
     addNewPost: addNewPost,
+    editPost: editPost,
     deletePost: deletePost,
   };
   return (

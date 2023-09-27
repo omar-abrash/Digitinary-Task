@@ -20,6 +20,10 @@ const AllPosts = () => {
     appCtx.addNewPost(newPost);
   };
 
+  const editPostHandler = (editPost) => {
+    appCtx.editPost(editPost);
+  };
+
   const deletePostHandler = (postId) => {
     appCtx.deletePost(postId);
   };
@@ -69,7 +73,11 @@ const AllPosts = () => {
                   key={post.id + Math.random()}
                   sx={{ width: `calc(100% / 3)` }}
                 >
-                  <SinglePost post={post} onDeletePost={deletePostHandler} />
+                  <SinglePost
+                    post={post}
+                    onDeletePost={deletePostHandler}
+                    onEditPost={editPostHandler}
+                  />
                 </Grid>
               ))}
             </Grid>

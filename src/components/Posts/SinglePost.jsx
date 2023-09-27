@@ -11,7 +11,7 @@ import {
 import DeleteDialog from "./DeleteDialog";
 import AddEditPostDialog from "./AddEditPostDialog";
 
-const SinglePost = ({ post, onDeletePost }) => {
+const SinglePost = ({ post, onDeletePost, onEditPost }) => {
   const [deleteState, setDeleteState] = useState(false);
   const [editState, setEditState] = useState(false);
   //
@@ -31,6 +31,7 @@ const SinglePost = ({ post, onDeletePost }) => {
           addEditOpenState={editState}
           afterAddPost={() => setEditState(false)}
           resetAddEditPostState={() => setEditState(false)}
+          onEditPost={onEditPost}
           from="edit"
           post={post}
         />

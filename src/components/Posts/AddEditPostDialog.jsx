@@ -1,5 +1,5 @@
 // import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -16,6 +16,7 @@ const AddEditPostDialog = ({
   addEditOpenState,
   resetAddEditPostState,
   onAddNewPost,
+  onEditPost,
 }) => {
   // define states
   const [open, setOpen] = useState(addEditOpenState);
@@ -58,11 +59,10 @@ const AddEditPostDialog = ({
     });
     // edit case should set new values on the state
     //
-
-    if (from === "add") {
-      // add new post Case
-      // console.log("Add post success!");
-      if (postTitleValid && postBodyValid) {
+    if (postTitleValid && postBodyValid) {
+      if (from === "add") {
+        // add new post Case
+        // console.log("Add post success!");
         fetch("https://jsonplaceholder.typicode.com/posts", {
           method: "POST",
           body: JSON.stringify({
@@ -75,29 +75,40 @@ const AddEditPostDialog = ({
           },
         })
           .then((response) => response.json())
-          .then((json) => onAddNewPost(json));
-        setOpen(false);
-        resetAddEditPostState();
+          .then((json) => {
+            onAddNewPost(json);
+            setOpen(false);
+            resetAddEditPostState();
+          });
+      } else {
+        // edit post Case
+        // console.log("Edit post success!");
+        fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            id: post.id,
+            title: postTitle,
+            body: postBody,
+            userId: userId,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json);
+            onEditPost(json);
+            setOpen(false);
+            resetAddEditPostState();
+          })
+          .catch((err) => {
+            // If we want cahne new posts (err) from API if we edit unknown id
+            onEditPost({ id: post.id, title: postTitle, body: postBody });
+            setOpen(false);
+            resetAddEditPostState();
+          });
       }
-    } else {
-      // edit post Case
-      // console.log("Edit post success!");
-      fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          id: post.id,
-          title: postTitle,
-          body: postBody,
-          userId: userId,
-        }),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => console.log(json));
-      setOpen(false);
-      resetAddEditPostState();
     }
   };
 
@@ -105,6 +116,20 @@ const AddEditPostDialog = ({
     setOpen(false);
     resetAddEditPostState();
   };
+  // if edit case should custom state with post values
+  useEffect(() => {
+    if (from === "edit") {
+      setFormState((prevState) => {
+        return {
+          ...prevState,
+          postTitle: post.title,
+          postBody: post.body,
+          postTitleValid: post.title.trim().length > 0,
+          postBodyValid: post.body.trim().length > 0,
+        };
+      });
+    }
+  }, [from, post]);
   //
   return (
     <div>

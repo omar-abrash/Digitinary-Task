@@ -24,7 +24,7 @@ const Header = () => {
         }}
       >
         <Box component="h1">
-          <Link to="/">Digitinary-Task</Link>
+          <Link to="/">Digitinary-Challenge</Link>
         </Box>
 
         <Box component="nav">

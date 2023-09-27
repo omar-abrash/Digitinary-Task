@@ -21,7 +21,7 @@ const Home = () => {
           variant="h3"
           sx={{ color: `var(--bg-color)`, pt: 5 }}
         >
-          Digitinary-Task
+          Digitinary-Challenge
         </Typography>
       </Container>
     </>
